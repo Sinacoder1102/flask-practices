@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple flask form</title>
+</head>
+<body>
+    <style>
+        body{
+            background-color: chartreuse;
+        }
+    </style>
+    <form action="/welcome" method="POST">
+        <h3>
+            Please enter your email
+        </h3>
+        <input type="email" name="email" required>
+        <h3>
+            Please enter your password
+        </h3>
+        <input type="password" name="password" required>
+        <button type="submit">click here to login</button>
+    </form>
+</body>
+</html>
