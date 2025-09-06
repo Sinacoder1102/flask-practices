@@ -111,3 +111,58 @@ def updateuser():
         return 'User updated successfully! , <a href"/">Home</a>'
     except Exception as ex:
         return f"Error is {ex}"
+--------------------------------------------------------------------------------------
+# making relationship between tables
+from flask import Flask,render_template
+import os
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+
+file_dir = os.path.dirname(__file__)
+goal_route = os.path.join(file_dir , "database.db")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + goal_route
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer , primary_key = True)
+    name = db.Column(db.String(60) , nullable = False)
+
+    def __repr__(self):
+        return self.name
+
+class Writer(db.Model):
+    id = db.Column(db.Integer , primary_key = True)
+    name = db.Column(db.String(60) , nullable = False)
+
+class Car(db.Model):
+    id = db.Column(db.Integer , primary_key = True)
+    name = db.Column(db.String(60) , nullable = False)
+    writer_id = db.Column(db.Integer() , db.ForeignKey("writer.id"))
+    writer = db.Relationship("Writer" , backref = db.backref("cars"))
+
+with app.app_context():
+    db.create_all()
+
+@app.route("/")
+def index():
+    return "Hello world"
+
+@app.route("/addbooks")
+def bookadding():
+    try:
+        writer = Writer(name = "Saba")
+        car = Car(name = "The car" , writer = writer)
+        writer.cars.append(car)
+        db.session.add(car)
+        db.session.commit()
+        return "Successfully added(car) <a href='/books'>See books</a>"
+    except Exception as ex:
+        return f"Failed {ex}"
+
+@app.route("/books")
+def show():
+    car = Car.query.all()
+    return render_template("index.html" , car = car)
