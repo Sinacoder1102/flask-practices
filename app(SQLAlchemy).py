@@ -153,7 +153,7 @@ def index():
 @app.route("/addbooks")
 def bookadding():
     try:
-        writer = Writer(name = "Saba")
+        writer = Writer(name = "Sina")
         car = Car(name = "The car" , writer = writer)
         writer.cars.append(car)
         db.session.add(car)
